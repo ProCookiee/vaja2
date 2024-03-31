@@ -48,7 +48,7 @@ vector<string> binarna(vector<int> numbers) {
 
 //Vrne digit na nekem mestu
 int returnDigit(string bin, int digit){
-    cout << bin[bin.size()-digit-1] <<endl;
+    //cout << bin[bin.size()-digit-1] <<endl;
     return bin[bin.size()-digit-1] - '0';
 }
 
@@ -65,14 +65,35 @@ void bubbleSort(vector<int> &D, vector<string> &sorted){
 
 }
 
+//Radix sort
+vector<string> radixSort(vector<string> bin, vector<int> numbers){
+    vector<string> sorted = bin;
+    vector<int> D;
+    for(int k = 0; k < 8; k++){
+        for(int j = 0; j < bin.size();j++){
+            D.push_back(returnDigit(bin[j],k));
+        }
+        bubbleSort(D,sorted);
+        for(int i = 0; i < sorted.size(); i++){
+            sorted[i][7-k] = '0' + D[i];
+        }
+        D.clear();   
+    }
+    return sorted;
+}
+
 int main() {
     vector<int> numbers;
     preberi(numbers);
     vector<string> bin = binarna(numbers);
+    
+    vector<string> sorted = radixSort(bin, numbers);
     ofstream izhod("izhod.txt");
-    for(int i = 0; i < bin.size(); i++) {
-        izhod << bin[i] << endl;
+    for(int i = 0; i < sorted.size(); i++) {
+        izhod << binToDec(sorted[i]) << " ";
     }
     izhod.close();
+
+
     return 0;
 }
