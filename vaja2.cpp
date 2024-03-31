@@ -13,12 +13,21 @@ void preberi(std::vector<int> &v) {
     vhod.close();
 }
 
+string decToBin(int x) {
+    string bin = "";
+    while(x > 0) {
+        bin = to_string(x % 2) + bin;
+        x /= 2;
+    }
+    return bin;
+}
+
 int main() {
     std::vector<int> v;
     preberi(v);
     ofstream izhod("izhod.txt");
     for(int i = 0; i < v.size(); i++) {
-        izhod << v[i] << endl;
+        izhod << decToBin(v[i]) << endl;
     }
     izhod.close();
     return 0;
