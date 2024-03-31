@@ -24,6 +24,15 @@ string decToBin(int x) {
     return bin;
 }
 
+//Pretvori binarno število nazaj v decimalno število
+int binToDec(string bin) {
+    int dec = 0;
+    for(int i = 0; i < bin.length(); i++) {
+        dec = dec * 2 + (bin[i] - '0');
+    }
+    return dec;
+}
+
 //Naredi vektor binarnih števil in doda 0 na začetek da so vsa števila dolga 8 mest ker je 8bit
 vector<string> binarna(vector<int> numbers) {
     vector<string> bin;
@@ -37,14 +46,41 @@ vector<string> binarna(vector<int> numbers) {
     return bin;
 }
 
+//Vrne digit na nekem mestu
+int returnDigit(string bin, int digit){
+    return bin[bin.size()-digit-1] - '0';
+}
+
+//Stable sort - uporabljen bubble sort
+void bubbleSort(vector<string> &sorted, int k) {
+    for (int i = 0; i < sorted.size() - 1; i++) {
+        for (int j = 0; j < sorted.size() - i - 1; j++) {
+            if (sorted[j][7-k] > sorted[j+1][7-k]) {
+                swap(sorted[j], sorted[j+1]);
+            }
+        }
+    }
+}
+
+//Radix sort
+vector<string> radixSort(vector<string> bin) {
+    vector<string> sorted = bin;
+    for (int k = 0; k < 8; k++) {
+        bubbleSort(sorted, k);
+    }
+    return sorted;
+}
+
 int main() {
     vector<int> numbers;
     preberi(numbers);
     vector<string> bin = binarna(numbers);
+    vector<string> sorted = radixSort(bin);
     ofstream izhod("izhod.txt");
-    for(int i = 0; i < bin.size(); i++) {
-        izhod << bin[i] << endl;
+    for(int i = 0; i < sorted.size(); i++) {
+        izhod << binToDec(sorted[i]) << " ";
     }
     izhod.close();
+    
     return 0;
 }
