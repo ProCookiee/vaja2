@@ -24,6 +24,15 @@ string decToBin(int x) {
     return bin;
 }
 
+//Pretvori binarno število nazaj v decimalno število
+int binToDec(string bin) {
+    int dec = 0;
+    for(int i = 0; i < bin.length(); i++) {
+        dec = dec * 2 + (bin[i] - '0');
+    }
+    return dec;
+}
+
 //Naredi vektor binarnih števil in doda 0 na začetek da so vsa števila dolga 8 mest ker je 8bit
 vector<string> binarna(vector<int> numbers) {
     vector<string> bin;
@@ -43,6 +52,7 @@ int returnDigit(string bin, int digit){
     return bin[bin.size()-digit-1] - '0';
 }
 
+//Stable sort - uporabljen bubble sort
 void bubbleSort(vector<int> &D, vector<string> &sorted){
     for(int i = 0; i < D.size(); i++){
         for(int j = 0; j < D.size()-1; j++){
