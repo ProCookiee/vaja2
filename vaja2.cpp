@@ -43,6 +43,17 @@ int returnDigit(string bin, int digit){
     return bin[bin.size()-digit-1] - '0';
 }
 
+void bubbleSort(vector<int> &D, vector<string> &sorted){
+    for(int i = 0; i < D.size(); i++){
+        for(int j = 0; j < D.size()-1; j++){
+            if(D[j] > D[j+1]){
+                swap(D[j],D[j+1]);
+                swap(sorted[j],sorted[j+1]);
+            }
+        }
+    }
+
+}
 
 int main() {
     vector<int> numbers;
