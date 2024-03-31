@@ -48,36 +48,25 @@ vector<string> binarna(vector<int> numbers) {
 
 //Vrne digit na nekem mestu
 int returnDigit(string bin, int digit){
-    //cout << bin[bin.size()-digit-1] <<endl;
     return bin[bin.size()-digit-1] - '0';
 }
 
 //Stable sort - uporabljen bubble sort
-void bubbleSort(vector<int> &D, vector<string> &sorted){
-    for(int i = 0; i < D.size(); i++){
-        for(int j = 0; j < D.size()-1; j++){
-            if(D[j] > D[j+1]){
-                swap(D[j],D[j+1]);
-                swap(sorted[j],sorted[j+1]);
+void bubbleSort(vector<string> &sorted, int k) {
+    for (int i = 0; i < sorted.size() - 1; i++) {
+        for (int j = 0; j < sorted.size() - i - 1; j++) {
+            if (sorted[j][7-k] > sorted[j+1][7-k]) {
+                swap(sorted[j], sorted[j+1]);
             }
         }
     }
-
 }
 
 //Radix sort
-vector<string> radixSort(vector<string> bin, vector<int> numbers){
+vector<string> radixSort(vector<string> bin) {
     vector<string> sorted = bin;
-    vector<int> D;
-    for(int k = 0; k < 8; k++){
-        for(int j = 0; j < bin.size();j++){
-            D.push_back(returnDigit(bin[j],k));
-        }
-        bubbleSort(D,sorted);
-        for(int i = 0; i < sorted.size(); i++){
-            sorted[i][7-k] = '0' + D[i];
-        }
-        D.clear();   
+    for (int k = 0; k < 8; k++) {
+        bubbleSort(sorted, k);
     }
     return sorted;
 }
@@ -86,14 +75,12 @@ int main() {
     vector<int> numbers;
     preberi(numbers);
     vector<string> bin = binarna(numbers);
-    
-    vector<string> sorted = radixSort(bin, numbers);
+    vector<string> sorted = radixSort(bin);
     ofstream izhod("izhod.txt");
     for(int i = 0; i < sorted.size(); i++) {
         izhod << binToDec(sorted[i]) << " ";
     }
     izhod.close();
-
-
+    
     return 0;
 }
