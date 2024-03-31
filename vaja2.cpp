@@ -37,6 +37,13 @@ vector<string> binarna(vector<int> numbers) {
     return bin;
 }
 
+//Vrne digit na nekem mestu
+int returnDigit(string bin, int digit){
+    cout << bin[bin.size()-digit-1] <<endl;
+    return bin[bin.size()-digit-1] - '0';
+}
+
+
 int main() {
     vector<int> numbers;
     preberi(numbers);
