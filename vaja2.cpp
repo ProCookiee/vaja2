@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include "vaja2.h"
 
 using namespace std;
 
@@ -71,16 +72,16 @@ vector<string> radixSort(vector<string> bin) {
     return sorted;
 }
 
-int main() {
+/*int main() {
     vector<int> numbers;
     preberi(numbers);
     vector<string> bin = binarna(numbers);
     vector<string> sorted = radixSort(bin);
-    ofstream izhod("izhod.txt");
+    ofstream izhod("out.txt");
     for(int i = 0; i < sorted.size(); i++) {
         izhod << binToDec(sorted[i]) << " ";
     }
     izhod.close();
     
     return 0;
-}
+}*/
