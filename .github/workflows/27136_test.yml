@@ -6,7 +6,7 @@ on:
 
 jobs:
   check-tests:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     outputs:
       tests-exist: ${{ steps.check-tests.outputs.tests-exist }}
