@@ -37,14 +37,25 @@ jobs:
   run-tests:
     needs: check-tests
     if: needs.check-tests.outputs.tests-exist == 'true'
-    runs-on: ubuntu-latest
-
+    runs-on: [self-hosted, linux, x64]
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        version: ["9", "10", "11"]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y g++ 
+      - name: Install compiler
+        run: |
+          sudo apt-get update
+          if [ "${{ matrix.compiler }}" = "gcc" ]; then
+            sudo apt-get install -y g++-${{ matrix.version }}
+          elif [ "${{ matrix.compiler }}" = "clang" ]; then
+            sudo apt-get install -y clang-${{ matrix.version }}
+          fi
 
       - name: Compile and run tests
         run: |
-          g++ -o test test_vaja2.cpp vaja2.cpp && ./test
+          ${{ matrix.compiler }} -v
+          ${{ matrix.compiler }} -o test test_vaja2.cpp vaja2.cpp
+          ./test
