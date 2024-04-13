@@ -6,8 +6,6 @@
 
 using namespace std;
 
-
-// Lahko dodate testne funkcije, ki preverijo posamezne komponente vaše kode
 void test_decToBin() {
     assert(decToBin(10) == "1010");
     assert(decToBin(1) == "1"); 
