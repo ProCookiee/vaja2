@@ -1,5 +1,6 @@
 name: Deploy to DockerHub
 
+# Sproži se takoj ko je "test" zaključen
 on:
   workflow_run:
     workflows: ["test"]
@@ -9,23 +10,27 @@ on:
 
 jobs:
   build-and-push:
+    # Tu določim da je se izvaja na mojem okolju
     runs-on: [self-hosted, linux, x64]
+    # Tu določim da se izvaja samo v primeru da je pri testu bil success
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      # Preveri kodo na GitHubu
       - name: Checkout repository
         uses: actions/checkout@v3
-
+      # Za podporo builda Docker slik
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-
+      # Prijava v Docker
       - name: Log in to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
-
+      # Tu se zbuilda docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
+        # Zbuilda se z uporabo file Dockerfile
         with:
           context: .
           file: Dockerfile
