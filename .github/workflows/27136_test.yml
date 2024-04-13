@@ -23,14 +23,11 @@ jobs:
           else
             echo "Test scripts do not exist." >&2
             echo "::set-output name=tests-exist::false"
+            echo "Test scripts are missing" > napaka.txt
             exit 1
           fi
 
-      - name: Create error log file
-        if: failure()
-        run: echo "Test scripts are missing" > napaka.txt
-
-      - name: Upload error log
+      - name: Upload error log if tests are missing
         if: failure()
         uses: actions/upload-artifact@v2
         with:
@@ -44,22 +41,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
-      - name: Download error log
-        uses: actions/download-artifact@v2
-        with:
-          name: error-log
-          path: .
-
-      - name: Check error log
-        run: |
-          if [ -f napaka.txt ]; then
-            cat napaka.txt
-            exit 1
-          fi
 
       - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential
+        run: sudo apt-get update && sudo apt-get install -y g++ 
 
       - name: Compile and run tests
         run: |
