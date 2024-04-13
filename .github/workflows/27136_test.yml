@@ -38,13 +38,19 @@ jobs:
     needs: check-tests
     if: needs.check-tests.outputs.tests-exist == 'true'
     runs-on: [self-hosted, linux, x64]
-
+    strategy:
+      matrix:
+        gcc-version: [9, 10, 11]
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install build dependencies
-        run: sudo apt-get update && sudo apt-get install -y g++ 
+      - name: Install specific GCC version
+        run: sudo apt-get install -y g++-${{ matrix.gcc-version }}
 
-      - name: Compile and run tests
+      - name: Compile with the specified GCC version
         run: |
-          g++ -o test test_vaja2.cpp vaja2.cpp && ./test
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ matrix.gcc-version }} 100
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${{ matrix.gcc-version }} 100
+          gcc -v
+          g++ -o test test_vaja2.cpp vaja2.cpp
+          ./test
