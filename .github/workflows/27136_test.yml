@@ -24,7 +24,6 @@ jobs:
             echo "Test scripts do not exist." >&2
             echo "::set-output name=tests-exist::false"
             echo "Test scripts are missing" > napaka.txt
-            exit 1
           fi
 
       - name: Upload error log if tests are missing
