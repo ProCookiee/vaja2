@@ -1,11 +1,14 @@
 name: test
 
+# Zažene se ko je push na main branch
 on:
   push:
     branches: [ "main" ]
 
 jobs:
+# Tu se preveri če testi obstajajo v repozitoriju
   check-tests:
+    # Tu napišem da se izvaja na self hosted runnerju
     runs-on: [self-hosted, linux, x64]
     outputs:
       tests-exist: ${{ steps.check-tests.outputs.tests-exist }}
@@ -13,6 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Če testi obstajajo v napaka.txt napise 1 če pa ne pa 0
       - name: Check for test scripts and create error log
         run: |
           if [ -f "test_vaja2.cpp" ]; then
@@ -23,27 +27,28 @@ jobs:
             echo "0" > napaka.txt
           fi
         shell: bash
-
+      #Nalaganje napaka.txt kot artifakt
       - name: Upload error log
         uses: actions/upload-artifact@v2
         with:
           name: error-log
           path: napaka.txt
-
+# To se nadaljuje ko se prvo opravilo konča
   run-tests:
-    needs: check-tests
+    needs: check-tests 
     runs-on: [self-hosted, linux, x64]
     strategy:
+      # Matrix se izvede na več verzijah gcc
       matrix:
         gcc-version: [9, 10, 11]
     steps:
       - uses: actions/checkout@v3
-
+      # Prenese artefakt napaka.txt
       - name: Download error log
         uses: actions/download-artifact@v2
         with:
           name: error-log
-
+      # Preveri kak je content v napaka.txt in če je 0 exita in ustavi workflow
       - name: Check error log content
         run: |
           content=$(cat napaka.txt)
@@ -52,10 +57,10 @@ jobs:
             exit 1
           fi
         shell: bash
-
+      # Za vsako verzijo iz matrix inštalira svojo verzijo
       - name: Install specific GCC version
         run: sudo apt-get update && sudo apt-get install -y g++-${{ matrix.gcc-version }}
-
+      # Za vsako verzijo iz matrix požene svojo verzijo
       - name: Compile with the specified GCC version
         run: |
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ matrix.gcc-version }} 100
