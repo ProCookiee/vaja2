@@ -13,17 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Check for test scripts
-        id: check-tests
+      - name: Check for test scripts and create error log
         run: |
-          if [ ! -f "test_vaja2.cpp" ]; then
-            echo "Test scripts are missing" >&2
-            echo "Test scripts are missing" > napaka.txt
+          if [ -f "test_vaja2.cpp" ]; then
+            echo "Test scripts exist."
+            echo "1" > napaka.txt
+          else
+            echo "Test scripts do not exist." >&2
+            echo "0" > napaka.txt
           fi
         shell: bash
 
-      - name: Upload error log if tests are missing
-        if: always()
+      - name: Upload error log
         uses: actions/upload-artifact@v2
         with:
           name: error-log
@@ -38,16 +39,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download error log if present
+      - name: Download error log
         uses: actions/download-artifact@v2
         with:
           name: error-log
 
-      - name: Check error log
+      - name: Check error log content
         run: |
-          if [ -f "napaka.txt" ]; then
-            echo "Error log found, stopping workflow."
-            cat napaka.txt
+          content=$(cat napaka.txt)
+          if [ "$content" == "0" ]; then
+            echo "Error log indicates missing tests, stopping workflow."
             exit 1
           fi
         shell: bash
