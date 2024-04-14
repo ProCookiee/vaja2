@@ -34,5 +34,5 @@ jobs:
         env:
           IMAGE_NAME: "ci_cd"
           IMAGE_TAG: "latest"
-          CONTAINER_NAME: "container"
+          CONTAINER_NAME: "container1"
 
