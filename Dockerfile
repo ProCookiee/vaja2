@@ -12,6 +12,7 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists/*
 
 # Prevedite vaš C++ program
+RUN g++ -o vaja2 vaja2.cpp
 RUN g++ -o test test_vaja2.cpp
 
 CMD ["./test"]
