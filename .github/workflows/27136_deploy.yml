@@ -27,12 +27,4 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_TOKEN }}
           IMAGE_NAME: "ci_cd"
           IMAGE_TAG: "latest"
-          
-      # Požene zazeni_27136.sh
-      - name: Run the container from the Docker image
-        run: ./zazeni_27136.sh
-        env:
-          IMAGE_NAME: "ci_cd"
-          IMAGE_TAG: "latest"
-          CONTAINER_NAME: "container1"
 
